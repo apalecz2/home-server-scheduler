@@ -1,0 +1,15 @@
+services:
+  scheduler:
+    build: .
+    container_name: home-scheduler
+    restart: unless-stopped
+    env_file:
+      - ./env/scheduler.env
+    volumes:
+      # Mount the jobs folder so you can update scripts without rebuilding
+      - ./jobs:/home-server-scheduler/jobs
+      # Persist logs to your host machine
+      - ./logs:/var/log/home-server-scheduler
+    # Ensure the container stays synced with host time for accurate cron
+    environment:
+      - TZ=America/New_York

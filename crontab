@@ -1,0 +1,6 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+0,30 * * * * . /etc/environment; /usr/local/bin/python /home-server-scheduler/jobs/youtube-summarizer-poll.py >> /var/log/home-server-scheduler/youtube-summarizer-poll.log 2>&1
+
+# This empty line is mandatory
