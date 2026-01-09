@@ -11,6 +11,21 @@ HEADERS = {
     "User-Agent": "scheduler/1.0",
 }
 
+MAX_PREVIEW_CHARS = 15
+
+def preview_response(response, max_chars=MAX_PREVIEW_CHARS):
+    """
+    Return a short, safe preview of the response body.
+    Works for JSON and plain text.
+    """
+    try:
+        body = response.text or ""
+    except Exception:
+        return "<unable to read response body>"
+
+    body = body.replace("\n", " ").strip()
+    return body[:max_chars] + ("..." if len(body) > max_chars else "")
+
 def main():
     if not URL:
         raise RuntimeError("YT_SUMM_URL env var not set")
@@ -33,13 +48,16 @@ def main():
         f"Status: {response.status_code}"
     )
 
+    # Always log a preview, regardless of success/failure
+    preview = preview_response(response)
+    if preview:
+        print(f"Response preview: {preview}")
+
     try:
         response.raise_for_status()
-        print("Success:", response.json())
+        print("Request succeeded")
     except requests.exceptions.HTTPError as e:
         print(f"Request failed: {e}")
-        if response.text:
-            print("Server Response:", response.text)
 
 if __name__ == "__main__":
     main()
