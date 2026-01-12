@@ -1,7 +1,11 @@
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
+# YouTube Summary - Poll for new uploads every hour and half hour
 0,30 * * * * . /etc/environment; /usr/local/bin/python /home-server-scheduler/jobs/youtube-summarizer-poll.py >> /var/log/home-server-scheduler/youtube-summarizer-poll.log 2>&1 && echo "$(tail -n 100 /var/log/home-server-scheduler/youtube-summarizer-poll.log)" > /var/log/home-server-scheduler/youtube-summarizer-poll.log
+
+# Stock Tracker - Update cached data every Sunday at 11:00 PM
+0 23 * * 0 . /etc/environment; /usr/local/bin/python /home-server-scheduler/jobs/stock-tracker-cache-refresh.py >> /var/log/home-server-scheduler/stock-refresh.log 2>&1 && echo "$(tail -n 100 /var/log/home-server-scheduler/stock-refresh.log)" > /var/log/home-server-scheduler/stock-refresh.log
 
 # This empty line is mandatory
 
